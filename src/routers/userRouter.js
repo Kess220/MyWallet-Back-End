@@ -38,8 +38,8 @@ router.post("/cadastro", async (req, res) => {
           .json({ message: "Usuário cadastrado com sucesso." });
       })
       .catch((error) => {
-          console.log(error);
-          
+        console.log(error);
+
         return res.status(500).json({ error: "Erro ao cadastrar usuário." });
       });
   } catch (error) {
