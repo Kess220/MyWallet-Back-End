@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
@@ -9,9 +10,11 @@ import { connectDB } from "./models/db.js";
 const app = express();
 dotenv.config();
 
+app.use(cors());
+
 app.use(bodyParser.json());
 
-app.use("/users", userRouter);
+app.use("/usuario", userRouter);
 app.use("/", authRouter);
 
 app.get("/", (req, res) => {

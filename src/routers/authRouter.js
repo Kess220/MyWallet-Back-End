@@ -35,10 +35,11 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ error: "Senha incorreta." });
     }
 
-    // Retornar a resposta de sucesso com o token e redirecionar o usuário para a rota /home
-    return res
-      .status(200)
-      .json({ token: "token_de_exemplo", redirect: "/home" });
+    // Gerar o token (exemplo: usando JWT)
+    const token = "token_de_exemplo";
+
+    // Retornar a resposta de sucesso com o token
+    return res.status(200).json({ token, redirect: "/home" });
   } catch (error) {
     console.error("Erro ao acessar o banco de dados:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });

@@ -1,5 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import { getDB } from "../models/db.js";
+
 const router = express.Router();
 
 router.post("/cadastro", async (req, res) => {
@@ -24,27 +26,18 @@ router.post("/cadastro", async (req, res) => {
     const hashedSenha = await bcrypt.hash(senha, 10);
 
     // Realizar o cadastro do usuário no banco de dados
-    const db = req.app.locals.db;
+    const db = getDB();
 
-    db.collection("usuarios")
-      .insertOne({
-        nome,
-        email,
-        senha: hashedSenha,
-      })
-      .then(() => {
-        return res
-          .status(201)
-          .json({ message: "Usuário cadastrado com sucesso." });
-      })
-      .catch((error) => {
-        console.log(error);
+    await db.collection("usuarios").insertOne({
+      nome,
+      email,
+      senha: hashedSenha,
+    });
 
-        return res.status(500).json({ error: "Erro ao cadastrar usuário." });
-      });
+    return res.status(201).json({ message: "Usuário cadastrado com sucesso." });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Erro ao criptografar senha." });
+    return res.status(500).json({ error: "Erro ao cadastrar usuário." });
   }
 });
 
