@@ -1,0 +1,38 @@
+# Arquivos gerados automaticamente
+/node_modules
+/dist
+/.env
+
+# Logs e arquivos temporários
+/logs
+/temp
+
+# Dependências geradas por package managers
+/yarn.lock
+/package-lock.json
+
+# Arquivos de configuração pessoal
+/config.js
+/secrets.js
+
+# Arquivos de build específicos da plataforma
+/build
+
+# Arquivos de cache
+/.cache
+
+# Arquivos de ambiente
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Arquivos de IDE
+/.vscode
+/.idea
+
+# Arquivos de teste
+/coverage
+
+# Outros arquivos ou pastas personalizadas que você deseja ignorar
+
