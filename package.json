@@ -1,6 +1,21 @@
 {
+  "name": "projeto14-mywallet-back-end",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Descrição do seu projeto",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js"
+  },
   "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongodb": "^5.6.0"
+    "mongodb": "^5.6.0",
+    "mongoose": "^7.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
