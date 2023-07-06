@@ -21,13 +21,22 @@ router.post("/cadastro", async (req, res) => {
     return res.status(422).json({ error: "As senhas não coincidem." });
   }
 
-  // Realizar a criptografia da senha
   try {
+    const db = getDB();
+
+    // Verificar se o email já está sendo utilizado
+    const existingUser = await db.collection("usuarios").findOne({ email });
+
+    if (existingUser) {
+      return res
+        .status(422)
+        .json({ error: "Este email já está sendo utilizado." });
+    }
+
+    // Realizar a criptografia da senha
     const hashedSenha = await bcrypt.hash(senha, 10);
 
     // Realizar o cadastro do usuário no banco de dados
-    const db = getDB();
-
     await db.collection("usuarios").insertOne({
       nome,
       email,
