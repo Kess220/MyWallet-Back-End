@@ -9,7 +9,7 @@
 
 # Dependências geradas por package managers
 /yarn.lock
-/package-lock.json
+
 
 # Arquivos de configuração pessoal
 /config.js
