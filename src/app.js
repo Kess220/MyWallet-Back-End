@@ -18,7 +18,7 @@ app.use("/usuario", userRouter);
 app.use("/", authRouter);
 
 app.get("/", (req, res) => {
-  res.send("Bem-vindo ao meu back-end!");
+  res.send("Bem vindo ao meu back-end!");
 });
 
 const port = process.env.PORT || 3000;
