@@ -1,7 +1,10 @@
 import express from "express";
 import { compare } from "bcrypt";
+import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
+
 import { getDB } from "../models/db.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -35,11 +38,46 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ error: "Senha incorreta." });
     }
 
-    // Gerar o token (exemplo: usando JWT)
-    const token = "token_de_exemplo";
+    // Gerar o token usando JWT
+    const token = jwt.sign(
+      { userId: user._id.toString() },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    // Salvar o token no documento do usuário no banco de dados
+    await db
+      .collection("usuarios")
+      .updateOne({ _id: new ObjectId(user._id) }, { $set: { token } });
 
     // Retornar a resposta de sucesso com o token
     return res.status(200).json({ token, redirect: "/home" });
+  } catch (error) {
+    console.error("Erro ao acessar o banco de dados:", error);
+    return res.status(500).json({ error: "Erro interno do servidor." });
+  }
+});
+
+// Rota para obter os dados do usuário logado
+router.get("/nome", authMiddleware, async (req, res) => {
+  try {
+    const db = getDB();
+
+    // Consultar o banco de dados para obter os dados do usuário
+    const user = await db
+      .collection("usuarios")
+      .findOne({ _id: new ObjectId(req.userId) });
+
+    console.log("User:", user); 
+
+    if (!user) {
+      return res.status(401).json({ error: "Usuário não autorizado" });
+    }
+
+    // Retornar os dados do usuário
+    return res.status(200).json({ nome: user.nome, email: user.email });
   } catch (error) {
     console.error("Erro ao acessar o banco de dados:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });

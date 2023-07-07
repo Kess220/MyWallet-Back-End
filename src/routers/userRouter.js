@@ -1,5 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
 import { getDB } from "../models/db.js";
 
 const router = express.Router();
@@ -36,8 +37,12 @@ router.post("/cadastro", async (req, res) => {
     // Realizar a criptografia da senha
     const hashedSenha = await bcrypt.hash(senha, 10);
 
+    // Criar um novo objeto ObjectId para o ID do usuário
+    const userId = new ObjectId();
+
     // Realizar o cadastro do usuário no banco de dados
     await db.collection("usuarios").insertOne({
+      _id: userId,
       nome,
       email,
       senha: hashedSenha,
