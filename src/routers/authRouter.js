@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
       .updateOne({ _id: new ObjectId(user._id) }, { $set: { token } });
 
     // Retornar a resposta de sucesso com o token
-    return res.status(200).json({ token, redirect: "/home" });
+    return res.status(200).json({ token });
   } catch (error) {
     console.error("Erro ao acessar o banco de dados:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });

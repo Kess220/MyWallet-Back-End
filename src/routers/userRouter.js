@@ -5,7 +5,7 @@ import { getDB } from "../models/db.js";
 
 const router = express.Router();
 
-router.post("/cadastro", async (req, res) => {
+router.post("/", async (req, res) => {
   const { nome, email, senha, confirmarSenha } = req.body;
 
   if (!nome || !email || !senha || !confirmarSenha) {
