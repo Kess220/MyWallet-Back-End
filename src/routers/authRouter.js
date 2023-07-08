@@ -2,11 +2,13 @@ import express from "express";
 import { compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
+import dotenv from "dotenv";
 
 import { getDB } from "../models/db.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+dotenv.config();
 
 // Rota de login
 router.post("/", async (req, res) => {
