@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 
 import userRouter from "./routers/userRouter.js";
 import authRouter from "./routers/authRouter.js";
+import transactionRouter from "./routers/transactionsRouter.js"; // Importe o roteador de transações
+
 import { connectDB } from "./models/db.js";
 
 const app = express();
@@ -16,6 +18,7 @@ app.use(bodyParser.json());
 // Registrar as rotas
 app.use("/cadastro", userRouter); // Rota para o cadastro
 app.use("/", authRouter); // Outras rotas de autenticação
+app.use("/", transactionRouter); // Rota de transações
 
 const port = process.env.PORT || 5000;
 
