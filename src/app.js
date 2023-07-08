@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use("/usuario", userRouter);
 app.use("/", authRouter);
 
-app.get("/", (req, res) => {
+app.get("/", authMiddleware, (req, res) => {
   res.send("Bem vindo ao meu back-end!");
 });
 
