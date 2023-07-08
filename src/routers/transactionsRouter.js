@@ -95,4 +95,24 @@ router.post("/nova-transacao/saida", authMiddleware, async (req, res) => {
   }
 });
 
+// Rota para obter todas as transações do usuário logado
+router.get("/transacoes", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const db = getDB();
+
+    // Obter todas as transações do usuário logado, ordenadas por data (da mais recente para a mais antiga)
+    const transacoes = await db
+      .collection("transacoes")
+      .find({ userId: new ObjectId(userId) })
+      .sort({ date: -1 })
+      .toArray();
+
+    return res.status(200).json(transacoes);
+  } catch (error) {
+    console.error("Erro ao obter as transações do usuário:", error);
+    return res.status(500).json({ error: "Erro interno do servidor." });
+  }
+});
+
 export default router;
