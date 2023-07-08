@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ error: "Senha incorreta." });
     }
 
-    // Gerar o token usando JWT
+    // Retornar a resposta de sucesso com o token
     const token = jwt.sign(
       { userId: user._id.toString() },
       process.env.JWT_SECRET,
@@ -46,13 +46,6 @@ router.post("/", async (req, res) => {
         expiresIn: "1h",
       }
     );
-
-    // Salvar o token no documento do usuário no banco de dados
-    await db
-      .collection("usuarios")
-      .updateOne({ _id: new ObjectId(user._id) }, { $set: { token } });
-
-    // Retornar a resposta de sucesso com o token
     return res.status(200).json({ token });
   } catch (error) {
     console.error("Erro ao acessar o banco de dados:", error);
