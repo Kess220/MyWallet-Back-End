@@ -68,7 +68,7 @@ router.get("/nome", authMiddleware, async (req, res) => {
     console.log("User:", user);
 
     if (!user) {
-      return res.status(401).json({ error: "Usuário não autorizado" });
+      return res.status(401).json({ error: "Usuário  não autorizado" });
     }
 
     // Retornar os dados do usuário
