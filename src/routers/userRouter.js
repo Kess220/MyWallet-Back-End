@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
 
     if (existingUser) {
       return res
-        .status(422)
+        .status(409)
         .json({ error: "Este email já está sendo utilizado." });
     }
 

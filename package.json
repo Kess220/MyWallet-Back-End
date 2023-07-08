@@ -5,7 +5,8 @@
   "description": "Descrição do seu projeto",
   "main": "app.js",
   "scripts": {
-    "start": "node ./src/app.js"
+    "start": "node ./src/app.js",
+    "dev": "npx nodemon ./src/app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
