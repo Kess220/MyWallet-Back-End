@@ -15,7 +15,7 @@ export const authMiddleware = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
-    console.log("UserID:", userId); 
+    console.log("UserID:", userId);
 
     const db = getDB();
 
