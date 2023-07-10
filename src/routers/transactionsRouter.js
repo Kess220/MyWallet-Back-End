@@ -70,10 +70,27 @@ router.get("/transacoes", authMiddleware, async (req, res) => {
     const transacoes = await db
       .collection("transacoes")
       .find({ userId: new ObjectId(userId) })
-      .sort({ date: -1 }) 
+      .sort({ date: -1 })
       .toArray();
 
-    return res.status(201).json(transacoes);
+    const saldo = transacoes.reduce((total, transacao) => {
+      return transacao.tipo === "entrada"
+        ? total + transacao.valor
+        : total - transacao.valor;
+    }, 0);
+
+    const transacoesFormatadas = transacoes.map((transacao) => {
+      const transacaoFormatada = {
+        ...transacao,
+        valorFormatado: formatarDinheiro(transacao.valor),
+      };
+      return transacaoFormatada;
+    });
+
+    return res.status(201).json({
+      transacoes: transacoesFormatadas,
+      saldo: formatarDinheiro(saldo),
+    });
   } catch (error) {
     console.error("Erro ao obter as transações do usuário:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });
