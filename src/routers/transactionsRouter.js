@@ -63,7 +63,7 @@ router.get("/transacoes", authMiddleware, async (req, res) => {
       .sort({ date: -1 })
       .toArray();
 
-    return res.status(200).json(transacoes);
+    return res.status(201).json(transacoes);
   } catch (error) {
     console.error("Erro ao obter as transações do usuário:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });
