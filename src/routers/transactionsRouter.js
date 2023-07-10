@@ -29,10 +29,10 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
     const db = getDB();
     const transacao = {
       tipo,
-      valor: parseFloat(valor),
+      valor: parseFloat(valor).toFixed(2), // Converter o valor para um número com duas casas decimais
       descricao,
       userId: new ObjectId(userId),
-      date: new Date(), // Adicione a propriedade "date" para ordenar as transações
+      date: new Date(),
     };
 
     const result = await db.collection("transacoes").insertOne(transacao);
@@ -42,9 +42,13 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
       .collection("transacoes")
       .findOne({ _id: insertedId });
 
+    // Enviar a resposta com o valor corrigido
     return res.status(201).json({
       mensagem: `Transação de ${tipo} criada com sucesso!`,
-      transacao: novaTransacao,
+      transacao: {
+        ...novaTransacao,
+        valor: parseFloat(novaTransacao.valor).toFixed(2),
+      },
     });
   } catch (error) {
     console.error("Erro ao criar a transação:", error);
