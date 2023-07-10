@@ -70,7 +70,7 @@ router.get("/transacoes", authMiddleware, async (req, res) => {
     const transacoes = await db
       .collection("transacoes")
       .find({ userId: new ObjectId(userId) })
-      .sort({ date: -1 })
+      .sort({ date: -1 }) 
       .toArray();
 
     return res.status(201).json(transacoes);
