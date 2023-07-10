@@ -5,14 +5,6 @@ import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Função para formatar um número para o formato de dinheiro (ex: 1.000,00)
-function formatarDinheiro(valor) {
-  return valor.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-}
-
 // Rota para criar uma nova transação
 router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
   try {
@@ -35,13 +27,12 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
     }
 
     const db = getDB();
-    const valorFormatado = formatarDinheiro(parseFloat(valor));
     const transacao = {
       tipo,
       valor: parseFloat(valor),
-      valorFormatado, // Adicionando o valor formatado
       descricao,
       userId: new ObjectId(userId),
+      date: new Date(), // Adicione a propriedade "date" para ordenar as transações
     };
 
     const result = await db.collection("transacoes").insertOne(transacao);
@@ -73,24 +64,7 @@ router.get("/transacoes", authMiddleware, async (req, res) => {
       .sort({ date: -1 })
       .toArray();
 
-    const saldo = transacoes.reduce((total, transacao) => {
-      return transacao.tipo === "entrada"
-        ? total + transacao.valor
-        : total - transacao.valor;
-    }, 0);
-
-    const transacoesFormatadas = transacoes.map((transacao) => {
-      const transacaoFormatada = {
-        ...transacao,
-        valorFormatado: formatarDinheiro(transacao.valor),
-      };
-      return transacaoFormatada;
-    });
-
-    return res.status(201).json({
-      transacoes: transacoesFormatadas,
-      saldo: formatarDinheiro(saldo),
-    });
+    return res.status(201).json(transacoes);
   } catch (error) {
     console.error("Erro ao obter as transações do usuário:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });
