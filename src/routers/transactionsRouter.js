@@ -27,13 +27,14 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
     }
 
     const db = getDB();
-    const valorFormatado =
-      typeof valor === "string"
-        ? valor.replace(".", "").replace(",", ".")
-        : valor;
+    const valorFormatado = parseFloat(valor).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    const valorSemPonto = valorFormatado.replace(/\./g, "");
     const transacao = {
       tipo,
-      valor: parseFloat(valorFormatado),
+      valor: valorSemPonto,
       descricao,
       userId: new ObjectId(userId),
       date: new Date(),
