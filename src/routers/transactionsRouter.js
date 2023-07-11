@@ -29,10 +29,13 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
     const db = getDB();
     const transacao = {
       tipo,
-      valor: parseFloat(valor),
+      valor: parseFloat(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
       descricao,
       userId: new ObjectId(userId),
-      date: new Date(), // Adicione a propriedade "date" para ordenar as transações
+      date: new Date(),
     };
 
     const result = await db.collection("transacoes").insertOne(transacao);
