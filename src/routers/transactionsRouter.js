@@ -29,7 +29,7 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
     const db = getDB();
     const transacao = {
       tipo,
-      valor: parseFloat(valor).toFixed(2), // Converter o valor para um número com duas casas decimais
+      valor: parseFloat(valor),
       descricao,
       userId: new ObjectId(userId),
       date: new Date(),
