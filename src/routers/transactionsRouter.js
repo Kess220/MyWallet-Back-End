@@ -27,19 +27,20 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
     }
 
     const db = getDB();
-    const valorFormatado = parseFloat(valor).toLocaleString("pt-BR", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    const valorFormatado =
+      typeof valor === "string"
+        ? valor.replace(".", "").replace(",", ".")
+        : valor;
     const transacao = {
       tipo,
-      valor: valorFormatado,
+      valor: parseFloat(valorFormatado),
       descricao,
       userId: new ObjectId(userId),
       date: new Date(),
     };
 
     const result = await db.collection("transacoes").insertOne(transacao);
+
     const insertedId = result.insertedId;
 
     const novaTransacao = await db
