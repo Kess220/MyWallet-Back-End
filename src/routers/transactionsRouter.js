@@ -27,12 +27,13 @@ router.post("/nova-transacao/:tipo", authMiddleware, async (req, res) => {
     }
 
     const db = getDB();
+    const valorFormatado = parseFloat(valor).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
     const transacao = {
       tipo,
-      valor: parseFloat(valor).toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
+      valor: valorFormatado,
       descricao,
       userId: new ObjectId(userId),
       date: new Date(),
@@ -67,7 +68,16 @@ router.get("/transacoes", authMiddleware, async (req, res) => {
       .sort({ date: -1 })
       .toArray();
 
-    return res.status(201).json(transacoes);
+    // Formatação dos valores das transações
+    const transacoesFormatadas = transacoes.map((transacao) => ({
+      ...transacao,
+      valor: transacao.valor.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    }));
+
+    return res.status(200).json(transacoesFormatadas);
   } catch (error) {
     console.error("Erro ao obter as transações do usuário:", error);
     return res.status(500).json({ error: "Erro interno do servidor." });
